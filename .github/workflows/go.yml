@@ -2,40 +2,40 @@ name: Go
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-  test:     
+  test:
     name: Test on Go ${{ matrix.go_version }} and ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        go_version: ['1.18', '1.17', '>=1.18']
+        go_version: ["1.17", "1.18", ">=1.18"]
         os: [ubuntu-latest, windows-11]
-    
+
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: ${{ matrix.go_version }}
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go_version }}
 
-    - name: Docker Build DB
-      run: docker-compose build
-    
-    - name: Docker Start DB
-      run: docker-compose up -d
-      
-    - name: Test App
-      run: go test -v main_test.go
-        
+      - name: Docker Build DB
+        run: docker-compose build
+
+      - name: Docker Start DB
+        run: docker-compose up -d
+
+      - name: Test App
+        run: go test -v main_test.go
+
   build:
     runs-on: ubuntu-latest
     needs: test
     steps:
-    - uses: actions/checkout@v3
-    - name: Build App
-      run: go build -v main.go
+      - uses: actions/checkout@v3
+      - name: Build App
+        run: go build -v main.go
